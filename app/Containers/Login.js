@@ -27,7 +27,7 @@ class Login extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.token) {
-      this.props.navigation.navigate('Home');
+      this.props.navigation.navigate('Profile');
     } else if (this.props.error) {
       Toast.show({ text: 'Wrong emai or password', buttonText: 'Okay' });
     }

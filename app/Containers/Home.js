@@ -13,7 +13,7 @@ import {
 import styles from './Styles/HomeStyles';
 import { connect } from 'react-redux';
 import Creators from '../Redux/HomeRedux';
-import { FlatList, ActivityIndicator } from 'react-native';
+import { FlatList, ActivityIndicator, View } from 'react-native';
 
 class Home extends React.Component {
   constructor(props) {
@@ -74,7 +74,13 @@ class Home extends React.Component {
 
   renderList() {
     const { jobs } = this.props;
-    return <FlatList data={jobs} renderItem={this.renderItem} />;
+    return (
+      <FlatList
+        data={jobs}
+        renderItem={this.renderItem}
+        ListEmptyComponent={() => <View />}
+      />
+    );
   }
 
   renderActivity() {

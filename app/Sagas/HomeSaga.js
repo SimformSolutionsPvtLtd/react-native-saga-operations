@@ -19,11 +19,6 @@ function* searchProceed(action) {
 }
 
 /**
- * Variable for accessing it into another generator function
- */
-let searching;
-
-/**
  * fork effect - it will call searchProcess function and wait for SEARCH_RESET action dispatch using take effect
  * and cancel forked task using cancel effect.
  *
@@ -33,8 +28,8 @@ let searching;
  * when searchProceed function is envoking and action.payload is blank then we dispatch searchReset action, it automatically call cancel effect
  * beacuse it was waiting for SEARCH_RESET action
  */
-export function* search1(action) {
-  searching = yield fork(searchProceed, action);
+export function* search2(action) {
+  const searching = yield fork(searchProceed, action);
   yield take(HomeTypes.SEARCH_RESET);
   yield cancel(searching);
 }
@@ -46,9 +41,9 @@ export function* search1(action) {
  * @param {*} action
  */
 export function* search(action) {
-  const { timeOut, response } = yield race({
+  const { response, reset } = yield race({
     response: call(api.searchJob, action.payload),
-    cancel: take(HomeTypes.SEARCH_RESET),
+    reset: take(HomeTypes.SEARCH_RESET),
   });
   if (response) {
     if (response.status === 200) {
@@ -57,6 +52,20 @@ export function* search(action) {
       yield put(HomeActions.searchFailure(response.error));
     }
   }
+  if (reset) {
+    yield put(HomeActions.searchReset());
+  }
+}
+
+/**
+ * We can achieve above functionality using race effect but calling another generator functions(searchProceeds)
+ * @param {*} action
+ */
+export function* search1(action) {
+  const { timeOut } = yield race({
+    response: call(searchProceed, action),
+    cancel: take(HomeTypes.SEARCH_RESET),
+  });
   if (timeOut) {
     yield put(HomeActions.searchReset());
   }
