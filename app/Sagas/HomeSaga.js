@@ -1,16 +1,13 @@
 import { call, put, race, take, fork, cancel, delay } from 'redux-saga/effects';
 import HomeActions, { HomeTypes } from '../Redux/HomeRedux';
-import Api from '../Services/Api';
-const api = Api();
-
 /**
  * If action.payload coming blank then we dispatch searchReset action via put effect,
  * Call searchJob api via call effect and store response and dispatch searchSuccess or searchFailure effect
  *
  * @param {*} action action.payload is search text here
  */
-function* searchProceed(action) {
-  const response = yield call(api.searchJob, action.payload);
+function* searchProceed(action, api) {
+  const response = yield call(api().searchJob, action.payload);
   if (response.status === 200) {
     yield put(HomeActions.searchSuccess(response.data));
   } else {
@@ -28,8 +25,8 @@ function* searchProceed(action) {
  * when searchProceed function is envoking and action.payload is blank then we dispatch searchReset action, it automatically call cancel effect
  * beacuse it was waiting for SEARCH_RESET action
  */
-export function* search2(action) {
-  const searching = yield fork(searchProceed, action);
+export function* search(api, action) {
+  const searching = yield fork(searchProceed, action, api);
   yield take(HomeTypes.SEARCH_RESET);
   yield cancel(searching);
 }
@@ -40,9 +37,9 @@ export function* search2(action) {
  *
  * @param {*} action
  */
-export function* search(action) {
+export function* search2(api, action) {
   const { response, reset } = yield race({
-    response: call(api.searchJob, action.payload),
+    response: call(api().searchJob, action.payload),
     reset: take(HomeTypes.SEARCH_RESET),
   });
   if (response) {

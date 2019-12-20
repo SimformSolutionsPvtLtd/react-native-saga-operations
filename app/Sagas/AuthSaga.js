@@ -1,8 +1,5 @@
 import { call, put, take } from 'redux-saga/effects';
 import AuthActions, { AuthTypes } from '../Redux/AuthRedux';
-import Api from '../Services/Api';
-const api = Api();
-
 function* handleResponse(response) {
   if (response.status === 200) {
     yield put(AuthActions.authSuccess(response.data.token));
@@ -16,9 +13,9 @@ function* handleResponse(response) {
  *
  * It is wait for REGISTER_SUCCESS action dispatching then perform api call
  */
-export function* login(action) {
+export function* login(api, action) {
   yield take(AuthTypes.REGISTER_SUCCESS);
-  let response = yield call(api.login, {
+  let response = yield call(api().login, {
     email: action.payload.email,
     password: action.payload.password,
   });
@@ -29,8 +26,8 @@ export function* login(action) {
 /**
  *
  */
-export function* register(action) {
-  let response = yield call(Api().register, {
+export function* register(api, action) {
+  let response = yield call(api().register, {
     email: action.payload.email,
     password: action.payload.password,
   });
