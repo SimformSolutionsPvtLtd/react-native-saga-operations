@@ -27,7 +27,7 @@ class Login extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.token) {
-      this.props.navigation.navigate('Profile');
+      this.props.navigation.navigate('Home');
     } else if (this.props.error) {
       Toast.show({ text: 'Wrong emai or password', buttonText: 'Okay' });
     }
@@ -88,12 +88,11 @@ class Login extends React.Component {
   }
 
   render() {
-    console.log(this.props.token);
     return (
-      <Container style={styles.container}>
+      <>
         {this.renderHeader()}
-        {this.renderForm()}
-      </Container>
+        <Container style={styles.container}>{this.renderForm()}</Container>
+      </>
     );
   }
 }

@@ -1,4 +1,4 @@
-import { call, put, race, take, fork, cancel, delay } from 'redux-saga/effects';
+import { call, put, race, take, fork, cancel } from 'redux-saga/effects';
 import HomeActions, { HomeTypes } from '../Redux/HomeRedux';
 /**
  * If action.payload coming blank then we dispatch searchReset action via put effect,
@@ -25,7 +25,7 @@ function* searchProceed(action, api) {
  * when searchProceed function is envoking and action.payload is blank then we dispatch searchReset action, it automatically call cancel effect
  * beacuse it was waiting for SEARCH_RESET action
  */
-export function* search(api, action) {
+export function* search1(api, action) {
   const searching = yield fork(searchProceed, action, api);
   yield take(HomeTypes.SEARCH_RESET);
   yield cancel(searching);
@@ -38,7 +38,7 @@ export function* search(api, action) {
  * @param {*} action
  */
 export function* search2(api, action) {
-  const { response, reset } = yield race({
+  const { response } = yield race({
     response: call(api().searchJob, action.payload),
     reset: take(HomeTypes.SEARCH_RESET),
   });
@@ -49,18 +49,15 @@ export function* search2(api, action) {
       yield put(HomeActions.searchFailure(response.error));
     }
   }
-  if (reset) {
-    yield put(HomeActions.searchReset());
-  }
 }
 
 /**
  * We can achieve above functionality using race effect but calling another generator functions(searchProceeds)
  * @param {*} action
  */
-export function* search1(action) {
+export function* search(api, action) {
   const { timeOut } = yield race({
-    response: call(searchProceed, action),
+    response: call(searchProceed, action, api),
     cancel: take(HomeTypes.SEARCH_RESET),
   });
   if (timeOut) {

@@ -1,4 +1,5 @@
 import { createActions, createReducer } from 'reduxsauce';
+import { resettableReducer } from 'reduxsauce';
 
 const initialState = {
   token: null,
@@ -11,10 +12,12 @@ export const { Types, Creators } = createActions({
   authSuccess: ['payload'],
   authFailure: ['payload'],
   registerSuccess: ['payload'],
+  reset: [null],
 });
 
 export default Creators;
 export const AuthTypes = Types;
+const resettable = resettableReducer(AuthTypes.RESET);
 
 const authRequest = state => {
   return { ...state, fetching: true, error: null };
@@ -39,4 +42,4 @@ const handlers = {
   [Types.REGISTER_SUCCESS]: registerSuccess,
 };
 
-export const authReducer = createReducer(initialState, handlers);
+export const authReducer = resettable(createReducer(initialState, handlers));

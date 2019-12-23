@@ -9,17 +9,22 @@ import {
   Input,
   Text,
   ListItem,
+  Button,
+  Right,
+  Left,
 } from 'native-base';
 import styles from './Styles/HomeStyles';
 import { connect } from 'react-redux';
-import Creators from '../Redux/HomeRedux';
-import { FlatList, ActivityIndicator, View } from 'react-native';
+import searchCreators from '../Redux/HomeRedux';
+import authCreators from '../Redux/AuthRedux';
+import { FlatList, ActivityIndicator } from 'react-native';
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       searchText: '',
+      loading: false,
     };
   }
 
@@ -36,12 +41,23 @@ class Home extends React.Component {
     }
   };
 
+  onLogoutPress = () => {
+    const { logout, navigation } = this.props;
+    logout();
+    navigation.navigate('authStack');
+  };
   renderHeader() {
     return (
       <Header>
+        <Left />
         <Body>
           <Title>Home</Title>
         </Body>
+        <Right>
+          <Button transparent onPress={this.onLogoutPress}>
+            <Icon type="FontAwesome" name="sign-out" />
+          </Button>
+        </Right>
       </Header>
     );
   }
@@ -73,14 +89,9 @@ class Home extends React.Component {
   };
 
   renderList() {
-    const { jobs } = this.props;
-    return (
-      <FlatList
-        data={jobs}
-        renderItem={this.renderItem}
-        ListEmptyComponent={() => <View />}
-      />
-    );
+    const { jobs, fetching } = this.props;
+    console.tron.log(fetching);
+    return <FlatList data={jobs} renderItem={this.renderItem} />;
   }
 
   renderActivity() {
@@ -92,19 +103,22 @@ class Home extends React.Component {
 
   render() {
     return (
-      <Container style={styles.container}>
+      <>
         {this.renderHeader()}
-        {this.renderSearchbar()}
-        {this.renderActivity()}
-        {this.renderList()}
-      </Container>
+        <Container style={styles.container}>
+          {this.renderSearchbar()}
+          {this.renderActivity()}
+          {this.renderList()}
+        </Container>
+      </>
     );
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  attemptSearch: filter => dispatch(Creators.searchRequest(filter)),
-  resetSearch: () => dispatch(Creators.searchReset()),
+  attemptSearch: filter => dispatch(searchCreators.searchRequest(filter)),
+  resetSearch: () => dispatch(searchCreators.searchReset()),
+  logout: () => dispatch(authCreators.reset()),
 });
 
 const mapStateToProps = state => ({
