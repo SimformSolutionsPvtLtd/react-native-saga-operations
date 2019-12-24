@@ -17,7 +17,8 @@ import styles from './Styles/HomeStyles';
 import { connect } from 'react-redux';
 import searchCreators from '../Redux/HomeRedux';
 import authCreators from '../Redux/AuthRedux';
-import { FlatList, ActivityIndicator } from 'react-native';
+import { FlatList, ActivityIndicator, View } from 'react-native';
+import { Loader } from '../Components';
 
 class Home extends React.Component {
   constructor(props) {
@@ -77,6 +78,17 @@ class Home extends React.Component {
     );
   }
 
+  renderEmptyList() {
+    if (!this.props.fetching) {
+      return (
+        <View style={styles.emptyList}>
+          <Loader source={require('../Animations/emptyJob.json')} />
+        </View>
+      );
+    }
+    return null;
+  }
+
   renderItem = ({ item }) => {
     return (
       <ListItem>
@@ -96,7 +108,12 @@ class Home extends React.Component {
 
   renderActivity() {
     if (this.props.fetching) {
-      return <ActivityIndicator />;
+      return (
+        <Loader
+          style={styles.loader}
+          source={require('../Animations/loading.json')}
+        />
+      );
     }
     return null;
   }
@@ -108,7 +125,9 @@ class Home extends React.Component {
         <Container style={styles.container}>
           {this.renderSearchbar()}
           {this.renderActivity()}
-          {this.renderList()}
+          {this.props?.jobs.length > 0
+            ? this.renderList()
+            : this.renderEmptyList()}
         </Container>
       </>
     );

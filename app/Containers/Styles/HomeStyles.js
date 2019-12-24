@@ -15,6 +15,15 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: '700',
   },
+  loader: {
+    height: 50,
+    width: 50,
+  },
+  emptyList: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default styles;

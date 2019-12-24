@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { View } from 'react-native';
 import store, { persistor } from './Redux/store';
 import RootContainer from './Containers/RootContainer';
 import DebugConfig from './Config/DebugConfig';
@@ -10,7 +11,9 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <RootContainer />
+          <View style={{ flex: 1, backgroundColor: '#00000060' }}>
+            <RootContainer />
+          </View>
         </PersistGate>
       </Provider>
     );

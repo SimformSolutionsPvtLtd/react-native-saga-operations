@@ -1,15 +1,19 @@
 import React from 'react';
-import ReduxNavigation from '../Navigation/ReduxNavigator';
-import { connect } from 'react-redux';
+import SplashScreen from 'react-native-splash-screen';
 import { NavigationActions } from 'react-navigation';
+import { connect } from 'react-redux';
+import ReduxNavigation from '../Navigation/ReduxNavigator';
 
 class RootContainer extends React.Component {
   componentDidMount() {
-    if (this.props.token) {
-      this.props.dispatch(
-        NavigationActions.navigate({ routeName: 'homeStack' }),
-      );
-    }
+    SplashScreen.hide();
+    setTimeout(() => {
+      let action = NavigationActions.navigate({ routeName: 'authStack' });
+      if (this.props.token) {
+        action = NavigationActions.navigate({ routeName: 'homeStack' });
+      }
+      this.props.dispatch(action);
+    }, 10);
   }
 
   render() {

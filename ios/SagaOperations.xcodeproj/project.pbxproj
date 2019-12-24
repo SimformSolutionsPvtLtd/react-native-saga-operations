@@ -24,6 +24,7 @@
 		3264A908180648AD8173085A /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 25034F0D4FF9416AB5E44261 /* Zocial.ttf */; };
 		3EE4B3C6B33A4BFF904612EC /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B6A80FC46E5C4C4E9D66F3AE /* Fontisto.ttf */; };
 		4700CF81D37B8850F6083B67 /* libPods-SagaOperationsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8910DE7559C602E0B679B4E3 /* libPods-SagaOperationsTests.a */; };
+		50916FB323B1EB8000C456FE /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50916FB223B1EB8000C456FE /* Test.swift */; };
 		66703EC206AB415FA3E8969E /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B6D265CB48704A10992E01D5 /* Entypo.ttf */; };
 		81A0E2CBB6FB45EC8B81B6DD /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72F0B526D0D944EBA25369C9 /* Feather.ttf */; };
 		83444E2338CCB2B13A9C63AF /* libPods-SagaOperations.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6C7AF8072E727561BA503FB /* libPods-SagaOperations.a */; };
@@ -81,6 +82,8 @@
 		350524C330A23D813270C077 /* Pods-SagaOperations-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SagaOperations-tvOS.release.xcconfig"; path = "Target Support Files/Pods-SagaOperations-tvOS/Pods-SagaOperations-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		40969E2676A942709777ABFB /* Pods-SagaOperations.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SagaOperations.release.xcconfig"; path = "Target Support Files/Pods-SagaOperations/Pods-SagaOperations.release.xcconfig"; sourceTree = "<group>"; };
 		4A874966C39345A99CE27C64 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		50916FB123B1EB8000C456FE /* SagaOperations-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SagaOperations-Bridging-Header.h"; sourceTree = "<group>"; };
+		50916FB223B1EB8000C456FE /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		55CF94DDF3944B799E92688B /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		58027595EBAB44F1BBDB8D8A /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		6091D9CE777EE56E8DA4A51E /* Pods-SagaOperations-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SagaOperations-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-SagaOperations-tvOSTests/Pods-SagaOperations-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -170,6 +173,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				50916FB223B1EB8000C456FE /* Test.swift */,
+				50916FB123B1EB8000C456FE /* SagaOperations-Bridging-Header.h */,
 			);
 			name = SagaOperations;
 			sourceTree = "<group>";
@@ -355,6 +360,9 @@
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1020;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -614,6 +622,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				50916FB323B1EB8000C456FE /* Test.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,6 +675,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A1CFDD3EFFD7E8C8263E732A /* Pods-SagaOperationsTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -689,6 +699,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A43C991DF4B8FDA6B227DD84 /* Pods-SagaOperationsTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = SagaOperationsTests/Info.plist;
@@ -710,6 +721,7 @@
 			baseConfigurationReference = 802C1A629C98D9B639537C14 /* Pods-SagaOperations.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				INFOPLIST_FILE = SagaOperations/Info.plist;
@@ -721,6 +733,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.simform.sagaoperations;
 				PRODUCT_NAME = SagaOperations;
+				SWIFT_OBJC_BRIDGING_HEADER = "SagaOperations-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -730,6 +745,7 @@
 			baseConfigurationReference = 40969E2676A942709777ABFB /* Pods-SagaOperations.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = SagaOperations/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -740,6 +756,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.simform.sagaoperations;
 				PRODUCT_NAME = SagaOperations;
+				SWIFT_OBJC_BRIDGING_HEADER = "SagaOperations-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
