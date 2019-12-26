@@ -9,7 +9,7 @@ const guidelineBaseHeight = 812;
 const horizontalScale = size => (width / guidelineBaseWidth) * size;
 const verticalScale = size => (height / guidelineBaseHeight) * size;
 const moderateScale = (size, factor = 0.5) =>
-  size + (scale(size) - size) * factor;
+  size + (horizontalScale(size) - size) * factor;
 
 // Used via Metrics.baseMargin
 const Metrics = {
@@ -28,20 +28,20 @@ const Metrics = {
     small: 20,
     medium: 30,
     large: 45,
-    xl: 50
+    xl: 50,
   },
   images: {
     small: 20,
     medium: 40,
     large: 60,
-    logo: 200
+    logo: 200,
   },
   headerShadow: {
     shadowColor: 'grey',
     shadowOffset: { width: 1, height: 2.5 },
     shadowOpacity: 0.2,
     shadowRadius: 1,
-    elevation: 2
+    elevation: 2,
   },
   size: {
     s: 5,
@@ -49,7 +49,7 @@ const Metrics = {
     l: 15,
     xl: 20,
     xxl: 25,
-    xxxl: 30
-  }
+    xxxl: 30,
+  },
 };
-export { scale, verticalScale, moderateScale, Metrics };
+export { horizontalScale, verticalScale, moderateScale, Metrics };

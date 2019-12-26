@@ -19,6 +19,31 @@ export function* addQuestions1(action) {
   //yield put(Creators.addQuestion(action.question));
 }
 
+export function* updateUser(api, action) {
+  const response = yield call(
+    api().updateUser,
+    action.payload,
+    action.userData,
+  );
+  if (response.status === 201) {
+    yield put(Actions.createUserSuccess(response.data));
+  } else {
+    yield put(Actions.createUserFailure(response.error));
+  }
+}
+
+export function* createUser(api, action) {
+  const response = yield call(api().createUser, {
+    name: action.name,
+    job: action.job,
+  });
+  if (response.status === 201) {
+    yield put(Actions.createUserSuccess(response.data.id, action.payload));
+  } else {
+    yield put(Actions.createUserFailure(response.error));
+  }
+}
+
 export function* connect() {
   console.log('connect');
   return { socket: 'socket' };

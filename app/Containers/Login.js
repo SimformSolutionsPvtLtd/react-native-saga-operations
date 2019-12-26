@@ -1,17 +1,6 @@
 import React from 'react';
-import {
-  Container,
-  Content,
-  Button,
-  Text,
-  Form,
-  Item,
-  Input,
-  Header,
-  Body,
-  Title,
-  Toast,
-} from 'native-base';
+import { Content, Button, Text, Item, Input, Toast } from 'native-base';
+import { View } from 'react-native';
 import styles from './Styles/LoginStyles';
 import { connect } from 'react-redux';
 import Creators from '../Redux/AuthRedux';
@@ -27,7 +16,7 @@ class Login extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.token) {
-      this.props.navigation.navigate('Home');
+      this.props.navigation.navigate('tab');
     } else if (this.props.error) {
       Toast.show({ text: 'Wrong emai or password', buttonText: 'Okay' });
     }
@@ -47,42 +36,42 @@ class Login extends React.Component {
     isRegister ? login(email, password) : login(email, password);
   };
 
+  onSignupPress = () => {
+    alert('In Progress');
+  };
   renderHeader() {
     return (
-      <Header>
-        <Body>
-          <Title>Login</Title>
-        </Body>
-      </Header>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Login</Text>
+      </View>
     );
   }
 
   renderForm() {
     return (
       <Content>
-        <Form>
-          <Item>
-            <Input
-              placeholder="Username"
-              value={this.state.email}
-              onChangeText={this.handleEmailChange}
-            />
-          </Item>
-          <Item>
-            <Input
-              secureTextEntry
-              placeholder="Password"
-              value={this.state.password}
-              onChangeText={this.handlePasswordChange}
-            />
-          </Item>
-        </Form>
-        <Button style={styles.button} onPress={() => this.onLoginPress(true)}>
-          <Text>Register</Text>
-        </Button>
+        <Item>
+          <Input
+            placeholder="Username"
+            value={this.state.email}
+            onChangeText={this.handleEmailChange}
+          />
+        </Item>
+        <Item>
+          <Input
+            secureTextEntry
+            placeholder="Password"
+            value={this.state.password}
+            onChangeText={this.handlePasswordChange}
+          />
+        </Item>
+
         <Button style={styles.button} onPress={this.onLoginPress}>
           <Text>Login</Text>
         </Button>
+        <Text style={styles.signup} onPress={this.onSignupPress}>
+          Don't have an account?
+        </Text>
       </Content>
     );
   }
@@ -90,8 +79,10 @@ class Login extends React.Component {
   render() {
     return (
       <>
-        {this.renderHeader()}
-        <Container style={styles.container}>{this.renderForm()}</Container>
+        <Content style={styles.container}>
+          {this.renderHeader()}
+          {this.renderForm()}
+        </Content>
       </>
     );
   }

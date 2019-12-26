@@ -1,97 +1,74 @@
-import React from 'react';
 import {
+  Body,
+  Button,
   Container,
   Header,
-  Body,
-  Title,
+  Item,
   Left,
-  Button,
-  Icon,
   Right,
   Text,
-  Item,
+  Title,
+  Content,
 } from 'native-base';
+import React, { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { CustomInput } from '../Components';
+import testCreators from '../Redux/TestRedux';
 import styles from './Styles/ProfileStyles';
-import { connect } from 'react-redux';
-import Creators from '../Redux/TestRedux';
-import { flow, subscribe } from '../Sagas/TestSaga';
 
-class Profile extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const renderHeader = () => {
+  return (
+    <Header>
+      <Left />
+      <Body>
+        <Title>Profile</Title>
+      </Body>
+      <Right />
+    </Header>
+  );
+};
 
-  onBackPress = () => {
-    this.props.navigation.goBack();
-  };
+const renderBody = (setName, setJob) => {
+  return (
+    <>
+      <Item>
+        <CustomInput placeholder={'Name'} onChange={text => setName(text)} />
+      </Item>
+      <Item>
+        <CustomInput placeholder={'Job'} onChange={text => setJob(text)} />
+      </Item>
+    </>
+  );
+};
 
-  addPress = () => {
-    this.props.addQuestion1('hi');
-  };
+const renderAddButton = addPress => {
+  return (
+    <Button style={styles.button} onPress={addPress}>
+      <Text>Add</Text>
+    </Button>
+  );
+};
 
-  seePress = () => {
-    // this.props.addQuestion1('hi');
-    this.props.startApp();
-  };
+const Profile = () => {
+  const [job, setJob] = useState('');
+  const [name, setName] = useState('');
+  const dispatch = useDispatch();
 
-  startAppPress = () => {
-    // this.props.startApp();
-    flow();
-  };
+  const addPress = useCallback(() => {
+    if (job !== '' && name !== '') {
+      dispatch(testCreators.createUser({ name, job }));
+    }
+  }, [dispatch, job, name]);
 
-  renderHeader() {
-    return (
-      <Header>
-        <Left>
-          <Button transparent onPress={this.onBackPress}>
-            <Icon name="arrow-back" style={styles.back} />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Profile</Title>
-        </Body>
-        <Right />
-      </Header>
-    );
-  }
+  return (
+    <Container style={styles.container}>
+      {renderHeader()}
+      <Content>
+        {renderBody(setName, setJob)}
+        {renderAddButton(addPress)}
+      </Content>
+    </Container>
+  );
+};
 
-  renderBody() {
-    return (
-      <>
-        <Button style={styles.button} onPress={this.addPress}>
-          <Text>Add</Text>
-        </Button>
-        <Button style={styles.button} onPress={this.seePress}>
-          <Text>See</Text>
-        </Button>
-        <Button style={styles.button} onPress={this.startAppPress}>
-          <Text>Start App</Text>
-        </Button>
-      </>
-    );
-  }
-
-  render() {
-    return (
-      <Container style={styles.container}>
-        {this.renderHeader()}
-        {this.renderBody()}
-      </Container>
-    );
-  }
-}
-
-const mapDispatchToProps = dispatch => ({
-  addQuestion: question => dispatch(Creators.addQuestion(question)),
-  addQuestion1: () => dispatch(Creators.addQuestion1('hi')),
-  startApp: () => dispatch(Creators.startApp()),
-});
-
-const mapStateToProps = state => ({
-  questions: state.test.question,
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Profile);
+export default Profile;

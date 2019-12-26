@@ -7,9 +7,9 @@ import {
 import { connect } from 'react-redux';
 import AppNavigation from './AppNavigation';
 
-createReactNavigationReduxMiddleware('root', state => state.nav);
+createReactNavigationReduxMiddleware(state => state.nav);
 
-const ReduxAppNavigator = createReduxContainer(AppNavigation, 'root');
+const ReduxAppNavigator = createReduxContainer(AppNavigation);
 
 class ReduxNavigation extends React.Component {
   componentDidMount() {

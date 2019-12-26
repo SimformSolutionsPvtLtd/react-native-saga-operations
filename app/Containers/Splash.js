@@ -1,6 +1,7 @@
 import React from 'react';
 import { Animated, Easing } from 'react-native';
 import LottieView from 'lottie-react-native';
+import { animatedGIF } from '../Animations';
 
 export default class Splash extends React.Component {
   constructor(props) {
@@ -20,10 +21,7 @@ export default class Splash extends React.Component {
 
   render() {
     return (
-      <LottieView
-        source={require('../Animations/1.json')}
-        progress={this.state.progress}
-      />
+      <LottieView source={animatedGIF.splash} progress={this.state.progress} />
     );
   }
 }

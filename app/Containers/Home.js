@@ -1,24 +1,26 @@
-import React from 'react';
 import {
+  Body,
+  Button,
   Container,
   Header,
-  Body,
-  Title,
-  Item,
   Icon,
   Input,
-  Text,
-  ListItem,
-  Button,
-  Right,
+  Item,
   Left,
+  ListItem,
+  Right,
+  Text,
+  Title,
 } from 'native-base';
-import styles from './Styles/HomeStyles';
+import React from 'react';
+import { FlatList, View } from 'react-native';
 import { connect } from 'react-redux';
-import searchCreators from '../Redux/HomeRedux';
-import authCreators from '../Redux/AuthRedux';
-import { FlatList, ActivityIndicator, View } from 'react-native';
 import { Loader } from '../Components';
+import authCreators from '../Redux/AuthRedux';
+import searchCreators from '../Redux/HomeRedux';
+import { animatedGIF } from '../Animations';
+import styles from './Styles/HomeStyles';
+import { withNavigation, NavigationEvents } from 'react-navigation';
 
 class Home extends React.Component {
   constructor(props) {
@@ -47,6 +49,7 @@ class Home extends React.Component {
     logout();
     navigation.navigate('authStack');
   };
+
   renderHeader() {
     return (
       <Header>
@@ -56,7 +59,7 @@ class Home extends React.Component {
         </Body>
         <Right>
           <Button transparent onPress={this.onLogoutPress}>
-            <Icon type="FontAwesome" name="sign-out" />
+            <Icon type="FontAwesome" name="sign-out" style={styles.right} />
           </Button>
         </Right>
       </Header>
@@ -65,16 +68,14 @@ class Home extends React.Component {
 
   renderSearchbar() {
     return (
-      <>
-        <Item>
-          <Icon name="ios-search" />
-          <Input
-            placeholder="Search"
-            onChangeText={this.onSearchChange}
-            value={this.state.searchText}
-          />
-        </Item>
-      </>
+      <Item>
+        <Icon name="ios-search" />
+        <Input
+          placeholder="Search"
+          onChangeText={this.onSearchChange}
+          value={this.state.searchText}
+        />
+      </Item>
     );
   }
 
@@ -82,7 +83,7 @@ class Home extends React.Component {
     if (!this.props.fetching) {
       return (
         <View style={styles.emptyList}>
-          <Loader source={require('../Animations/emptyJob.json')} />
+          <Loader source={animatedGIF.emptyList} />
         </View>
       );
     }
@@ -108,12 +109,7 @@ class Home extends React.Component {
 
   renderActivity() {
     if (this.props.fetching) {
-      return (
-        <Loader
-          style={styles.loader}
-          source={require('../Animations/loading.json')}
-        />
-      );
+      return <Loader style={styles.loader} source={animatedGIF.loading} />;
     }
     return null;
   }
@@ -121,6 +117,7 @@ class Home extends React.Component {
   render() {
     return (
       <>
+        <NavigationEvents onDidFocus={() => this.props.attemptSearch()} />
         {this.renderHeader()}
         <Container style={styles.container}>
           {this.renderSearchbar()}

@@ -6,7 +6,10 @@ import Home from '../Containers/Home';
 import Profile from '../Containers/Profile';
 import Splash from '../Containers/Splash';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Transition } from 'react-native-reanimated';
+import { Icon } from 'native-base';
+import { Colors } from '../Theme';
 
 const onBoardStack = createStackNavigator(
   {
@@ -22,19 +25,37 @@ const authStack = createStackNavigator(
   { headerMode: 'none' },
 );
 
-const homeStack = createStackNavigator(
+const tabIcon = (label, icon) => {
+  return {
+    tabBarLabel: label,
+    tabBarIcon: ({ tintColor }) => (
+      <Icon name={icon} type="FontAwesome" size={30} />
+    ),
+  };
+};
+
+const tab = createBottomTabNavigator(
   {
-    Home: { screen: Home },
-    Profile: { screen: Profile },
+    Home: { screen: Home, navigationOptions: tabIcon('Home', 'home') },
+    Profile: {
+      screen: Profile,
+      navigationOptions: tabIcon('Profile', 'user'),
+    },
   },
-  { headerMode: 'none' },
+  {
+    headerMode: 'none',
+    tabBarOptions: {
+      activeTintColor: Colors.black,
+      inactiveTintColor: Colors.grey,
+    },
+  },
 );
 
 const PrimaryNav = createAnimatedSwitchNavigator(
   {
     onBoardStack,
     authStack,
-    homeStack,
+    tab,
   },
   {
     initialRouteName: 'onBoardStack',
@@ -46,4 +67,5 @@ const PrimaryNav = createAnimatedSwitchNavigator(
     ),
   },
 );
+
 export default createAppContainer(PrimaryNav);
