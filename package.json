@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.7.1",
+    "@react-native-firebase/app": "^6.2.0",
+    "@react-native-firebase/auth": "^6.2.0",
     "apisauce": "^1.1.1",
     "lottie-react-native": "^3.3.2",
     "native-base": "^2.13.8",

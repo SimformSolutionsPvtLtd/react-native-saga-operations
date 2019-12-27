@@ -6,6 +6,11 @@ import {
   eventChannel,
 } from 'redux-saga/effects';
 import AuthActions, { AuthTypes } from '../Redux/AuthRedux';
+import {
+  signUpWithFirebase,
+  signInWithFirebase,
+} from '../Config/FirebaseConfig';
+
 function* handleResponse(response) {
   if (response.status === 200) {
     yield put(AuthActions.authSuccess(response.data.token));
@@ -19,7 +24,7 @@ function* handleResponse(response) {
  *
  * It is wait for REGISTER_SUCCESS action dispatching then perform api call
  */
-export function* login(api, action) {
+export function* login2(api, action) {
   // yield take(AuthTypes.REGISTER_SUCCESS);
   console.tron.log('request login');
   let response = yield call(api().login, {
@@ -67,5 +72,22 @@ export function* watchRequests(api) {
   while (true) {
     const action = yield take(requestChannel);
     yield call(login1, api, action);
+  }
+}
+
+/**
+ *
+ * @param {*} action contains signin or not and object(email and password)
+ * Based on action.signin calling different function
+ */
+export function* signinOrSignupWithEmail(action) {
+  const { email, password } = action.payload;
+  try {
+    const response = yield action.signin
+      ? signInWithFirebase(email, password)
+      : signUpWithFirebase(email, password);
+    yield put(AuthActions.authSuccess(response));
+  } catch (error) {
+    yield put(AuthActions.authFailure(error));
   }
 }

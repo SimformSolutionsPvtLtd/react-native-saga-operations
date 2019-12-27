@@ -109,7 +109,7 @@ class Home extends React.Component {
 
   renderActivity() {
     if (this.props.fetching) {
-      return <Loader style={styles.loader} source={animatedGIF.loading} />;
+      return <Loader style={styles.loader} source={animatedGIF.searching} />;
     }
     return null;
   }

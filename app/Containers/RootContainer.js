@@ -9,7 +9,7 @@ class RootContainer extends React.Component {
     SplashScreen.hide();
     setTimeout(() => {
       let action = NavigationActions.navigate({ routeName: 'authStack' });
-      if (this.props.token) {
+      if (this.props.user) {
         action = NavigationActions.navigate({ routeName: 'tab' });
       }
       this.props.dispatch(action);
@@ -22,6 +22,6 @@ class RootContainer extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
+  user: state.auth.user,
 });
 export default connect(mapStateToProps)(RootContainer);

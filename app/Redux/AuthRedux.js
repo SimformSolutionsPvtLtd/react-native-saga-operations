@@ -2,13 +2,13 @@ import { createActions, createReducer } from 'reduxsauce';
 import { resettableReducer } from 'reduxsauce';
 
 const initialState = {
-  token: null,
   fetching: false,
   error: null,
+  user: null,
 };
 
 export const { Types, Creators } = createActions({
-  authRequest: ['payload'],
+  authRequest: ['payload', 'signin'],
   authSuccess: ['payload'],
   authFailure: ['payload'],
   registerSuccess: ['payload'],
@@ -24,22 +24,17 @@ const authRequest = state => {
 };
 
 const authSuccess = (state, action) => {
-  return { ...state, fetching: false, token: action.payload };
+  return { ...state, fetching: false, user: action.payload };
 };
 
 const authFailure = (state, action) => {
   return { ...state, fetching: false, error: action.payload };
 };
 
-const registerSuccess = (state, action) => {
-  return { ...state, fetching: false, token: action.payload };
-};
-
 const handlers = {
   [Types.AUTH_REQUEST]: authRequest,
   [Types.AUTH_SUCCESS]: authSuccess,
   [Types.AUTH_FAILURE]: authFailure,
-  [Types.REGISTER_SUCCESS]: registerSuccess,
 };
 
 export const authReducer = resettable(createReducer(initialState, handlers));

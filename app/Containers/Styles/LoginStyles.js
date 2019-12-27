@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    width: 100,
+    width: 160,
     marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -26,6 +26,10 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Fonts.style.h2,
+  },
+  loader: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

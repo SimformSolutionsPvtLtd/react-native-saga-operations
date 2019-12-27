@@ -6,6 +6,7 @@ import {
 } from 'react-navigation-redux-helpers';
 import { connect } from 'react-redux';
 import AppNavigation from './AppNavigation';
+import { Root } from 'native-base';
 
 createReactNavigationReduxMiddleware(state => state.nav);
 
@@ -40,10 +41,12 @@ class ReduxNavigation extends React.Component {
 
   render() {
     return (
-      <ReduxAppNavigator
-        dispatch={this.props.dispatch}
-        state={this.props.nav}
-      />
+      <Root>
+        <ReduxAppNavigator
+          dispatch={this.props.dispatch}
+          state={this.props.nav}
+        />
+      </Root>
     );
   }
 }

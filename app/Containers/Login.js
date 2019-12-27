@@ -1,24 +1,31 @@
 import React from 'react';
-import { Content, Button, Text, Item, Input, Toast } from 'native-base';
-import { View } from 'react-native';
+import { Content, Button, Text, Item, Toast } from 'native-base';
+import { View, StyleSheet } from 'react-native';
 import styles from './Styles/LoginStyles';
 import { connect } from 'react-redux';
 import Creators from '../Redux/AuthRedux';
+import CustomInput from '../Components/CustomInput';
+import { strings } from '../Constants';
+import { Loader } from '../Components';
+import { animatedGIF } from '../Animations';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'eve.holt@reqres.in',
-      password: 'cityslicka',
+      email: 'brijesh25@gmail.com',
+      password: 'brijesh',
     };
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.token) {
-      this.props.navigation.navigate('tab');
-    } else if (this.props.error) {
-      Toast.show({ text: 'Wrong emai or password', buttonText: 'Okay' });
+    const { user, error, navigation, fetching } = this.props;
+    if (prevProps.fetching && !fetching) {
+      if (user) {
+        navigation.navigate('tab');
+      } else if (error && !fetching) {
+        Toast.show({ text: error, buttonText: 'Okay' });
+      }
     }
   }
 
@@ -30,15 +37,18 @@ class Login extends React.Component {
     this.setState({ password: password });
   };
 
-  onLoginPress = (isRegister = false) => {
+  onLoginPress = () => {
     const { email, password } = this.state;
     const { login } = this.props;
-    isRegister ? login(email, password) : login(email, password);
+    login(email, password, true);
   };
 
   onSignupPress = () => {
-    alert('In Progress');
+    const { email, password } = this.state;
+    const { login } = this.props;
+    login(email, password, false);
   };
+
   renderHeader() {
     return (
       <View style={styles.header}>
@@ -47,33 +57,51 @@ class Login extends React.Component {
     );
   }
 
-  renderForm() {
+  renderFields() {
     return (
-      <Content>
+      <>
         <Item>
-          <Input
+          <CustomInput
             placeholder="Username"
             value={this.state.email}
             onChangeText={this.handleEmailChange}
           />
         </Item>
         <Item>
-          <Input
+          <CustomInput
             secureTextEntry
             placeholder="Password"
             value={this.state.password}
             onChangeText={this.handlePasswordChange}
           />
         </Item>
+      </>
+    );
+  }
 
-        <Button style={styles.button} onPress={this.onLoginPress}>
-          <Text>Login</Text>
+  renderForm() {
+    return (
+      <Content>
+        {this.renderFields()}
+        <Button rounded style={styles.button} onPress={this.onLoginPress}>
+          <Text>{strings.loginWithEmail}</Text>
         </Button>
         <Text style={styles.signup} onPress={this.onSignupPress}>
-          Don't have an account?
+          {strings.signupWithEmail}
         </Text>
       </Content>
     );
+  }
+
+  renderLoading() {
+    if (this.props.fetching) {
+      return (
+        <View style={[StyleSheet.absoluteFill, styles.loader]}>
+          <Loader source={animatedGIF.loading} />
+        </View>
+      );
+    }
+    return null;
   }
 
   render() {
@@ -83,19 +111,21 @@ class Login extends React.Component {
           {this.renderHeader()}
           {this.renderForm()}
         </Content>
+        {this.renderLoading()}
       </>
     );
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  login: (email, password) =>
-    dispatch(Creators.authRequest({ email, password })),
+  login: (email, password, signin) =>
+    dispatch(Creators.authRequest({ email, password }, signin)),
 });
 
 const mapStateToProps = state => ({
-  token: state.auth.token,
+  user: state.auth.user,
   error: state.auth.error,
+  fetching: state.auth.fetching,
 });
 
 export default connect(

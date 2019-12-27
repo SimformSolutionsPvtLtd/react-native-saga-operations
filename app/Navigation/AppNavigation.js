@@ -61,8 +61,8 @@ const PrimaryNav = createAnimatedSwitchNavigator(
     initialRouteName: 'onBoardStack',
     transition: (
       <Transition.Sequence>
-        <Transition.Out type="fade" durationMs={400} interpolation="easeIn" />
-        <Transition.In type="fade" durationMs={500} />
+        <Transition.Out type="fade" durationMs={200} interpolation="easeIn" />
+        <Transition.In type="fade" durationMs={300} />
       </Transition.Sequence>
     ),
   },
