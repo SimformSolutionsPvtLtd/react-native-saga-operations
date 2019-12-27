@@ -20,17 +20,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   header: {
-    height: '40%',
+    height: '20%',
     justifyContent: 'flex-end',
     paddingBottom: 20,
   },
   headerTitle: {
     ...Fonts.style.h2,
   },
-  loader: {
+  loaderContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },
+  loader: {
+    height: 60,
+    width: 60
+  }
 });
 
 export default styles;

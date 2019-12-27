@@ -17,7 +17,6 @@ export const { Types, Creators } = createActions({
 
 export default Creators;
 export const AuthTypes = Types;
-const resettable = resettableReducer(AuthTypes.RESET);
 
 const authRequest = state => {
   return { ...state, fetching: true, error: null };
@@ -37,4 +36,4 @@ const handlers = {
   [Types.AUTH_FAILURE]: authFailure,
 };
 
-export const authReducer = resettable(createReducer(initialState, handlers));
+export const authReducer = createReducer(initialState, handlers);

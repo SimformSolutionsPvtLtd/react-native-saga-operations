@@ -1,26 +1,13 @@
-import {
-  Body,
-  Button,
-  Container,
-  Header,
-  Icon,
-  Input,
-  Item,
-  Left,
-  ListItem,
-  Right,
-  Text,
-  Title,
-} from 'native-base';
+import { Body, Button, Container, Header, Icon, Input, Item, Left, ListItem, Right, Text, Title } from 'native-base';
 import React from 'react';
 import { FlatList, View } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
+import { animatedGIF } from '../Animations';
 import { Loader } from '../Components';
 import authCreators from '../Redux/AuthRedux';
 import searchCreators from '../Redux/HomeRedux';
-import { animatedGIF } from '../Animations';
 import styles from './Styles/HomeStyles';
-import { withNavigation, NavigationEvents } from 'react-navigation';
 
 class Home extends React.Component {
   constructor(props) {
@@ -52,12 +39,15 @@ class Home extends React.Component {
 
   renderHeader() {
     return (
-      <Header>
-        <Left />
-        <Body>
-          <Title>Home</Title>
+      <Header style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Left style={{ flex: 1 }} />
+        <Body
+          style={{
+            flex: 1,
+          }}>
+          <Title style={{ alignSelf: 'center' }}>Home</Title>
         </Body>
-        <Right>
+        <Right style={{ flex: 1 }}>
           <Button transparent onPress={this.onLogoutPress}>
             <Icon type="FontAwesome" name="sign-out" style={styles.right} />
           </Button>

@@ -9,7 +9,7 @@ import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-hel
 const persistConfig = {
   key: '@sagaOperations',
   storage: AsyncStorage,
-  whitelist: ['test', 'auth'],
+  whitelist: ['test', 'auth', 'todo'],
 };
 
 const SagaMiddleware = createSagaMiddleware({

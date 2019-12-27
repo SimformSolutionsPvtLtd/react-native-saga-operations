@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "109693759711",
+    "firebase_url": "https://rn-sagaoperations.firebaseio.com",
+    "project_id": "rn-sagaoperations",
+    "storage_bucket": "rn-sagaoperations.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109693759711:android:e341614b8944a487dd396a",
+        "android_client_info": {
+          "package_name": "com.sagaoperations"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "109693759711-4o1qhk1fv3gvpk5698vdcp195il7t93o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFPWWE_LqIG-ydV8gEGGQips6EUGgdMN0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "109693759711-4o1qhk1fv3gvpk5698vdcp195il7t93o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "109693759711-n59kfj544jn5digm9lgq7bb69h7crtmu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.simform.sagaoperations"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

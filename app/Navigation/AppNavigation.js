@@ -3,6 +3,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import Login from '../Containers/Login';
 import Home from '../Containers/Home';
+import Todo from '../Containers/Todo';
 import Profile from '../Containers/Profile';
 import Splash from '../Containers/Splash';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
@@ -36,6 +37,7 @@ const tabIcon = (label, icon) => {
 
 const tab = createBottomTabNavigator(
   {
+    Todo: { screen: Todo, navigationOptions: tabIcon('Todo', 'list-ul') },
     Home: { screen: Home, navigationOptions: tabIcon('Home', 'home') },
     Profile: {
       screen: Profile,

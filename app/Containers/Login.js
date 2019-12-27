@@ -1,5 +1,5 @@
 import React from 'react';
-import { Content, Button, Text, Item, Toast } from 'native-base';
+import { Content, Button, Text, Item, Toast, Container } from 'native-base';
 import { View, StyleSheet } from 'react-native';
 import styles from './Styles/LoginStyles';
 import { connect } from 'react-redux';
@@ -79,25 +79,24 @@ class Login extends React.Component {
     );
   }
 
-  renderForm() {
+  renderButtons() {
     return (
-      <Content>
-        {this.renderFields()}
+      <>
         <Button rounded style={styles.button} onPress={this.onLoginPress}>
           <Text>{strings.loginWithEmail}</Text>
         </Button>
         <Text style={styles.signup} onPress={this.onSignupPress}>
           {strings.signupWithEmail}
         </Text>
-      </Content>
+      </>
     );
   }
 
   renderLoading() {
     if (this.props.fetching) {
       return (
-        <View style={[StyleSheet.absoluteFill, styles.loader]}>
-          <Loader source={animatedGIF.loading} />
+        <View style={styles.loaderContainer}>
+          <Loader style={styles.loader} source={animatedGIF.loading} />
         </View>
       );
     }
@@ -106,13 +105,12 @@ class Login extends React.Component {
 
   render() {
     return (
-      <>
-        <Content style={styles.container}>
-          {this.renderHeader()}
-          {this.renderForm()}
-        </Content>
+      <Container style={styles.container}>
+        {this.renderHeader()}
+        {this.renderFields()}
+        {this.renderButtons()}
         {this.renderLoading()}
-      </>
+      </Container>
     );
   }
 }

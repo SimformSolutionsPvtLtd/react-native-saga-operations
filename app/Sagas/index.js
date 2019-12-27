@@ -1,9 +1,11 @@
 import { all, takeLatest, call, takeEvery } from 'redux-saga/effects';
 import { signinOrSignupWithEmail, register, watchRequests } from './AuthSaga';
 import { search } from './HomeSaga';
+import { addTodo, getAllTodo } from './TodoSaga';
 import { createUser, updateUser } from './TestSaga';
 import { AuthTypes } from '../Redux/AuthRedux';
 import { HomeTypes } from '../Redux/HomeRedux';
+import { TodoTypes } from '../Redux/TodoRedux';
 import { TestTypes } from '../Redux/TestRedux';
 import ApiJob from '../Services/JobApi';
 import ApiTest from '../Services/TestApi';
@@ -13,6 +15,8 @@ export default function* rootSaga() {
   yield all([
     // takeEvery('*', watchLog),
     takeLatest(AuthTypes.AUTH_REQUEST, signinOrSignupWithEmail),
+    takeLatest(TodoTypes.TODO_REQUEST, addTodo),
+    takeLatest(TodoTypes.GET_TODO, getAllTodo),
     // takeLatest(AuthTypes.AUTH_REQUEST, register, ApiLogin),
     takeLatest(HomeTypes.SEARCH_REQUEST, search, ApiJob),
     takeLatest(TestTypes.ADD_QUESTION, addQuestions),

@@ -9,7 +9,7 @@ import AuthActions, { AuthTypes } from '../Redux/AuthRedux';
 import {
   signUpWithFirebase,
   signInWithFirebase,
-} from '../Config/FirebaseConfig';
+} from '../Services/Firebase/Auth';
 
 function* handleResponse(response) {
   if (response.status === 200) {

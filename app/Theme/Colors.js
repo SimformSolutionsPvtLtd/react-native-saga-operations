@@ -1,4 +1,5 @@
 const colors = {
+  primary: '#179653',
   transparent: 'rgba(0,0,0,0)',
   error: 'rgba(200, 0, 0, 0.8)',
   white: 'white',
