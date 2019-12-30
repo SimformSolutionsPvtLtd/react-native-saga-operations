@@ -22,14 +22,13 @@ const todoRequest = state => {
 
 const todoSuccess = (state, action) => {
   const payload = Array.isArray(action.payload) ? action.payload : [action.payload]
-  return { ...state, fetching: false, todoList: [...state.todoList, ...payload] };
+  const resultPayload = payload.filter((item) => item.deleted === 0);
+  return { ...state, fetching: false, todoList: [...state.todoList, ...resultPayload] };
 };
 
 const todoFailure = (state, action) => {
   return { ...state, fetching: false, error: action.payload };
 };
-
-
 
 const handlers = {
   [Types.TODO_REQUEST]: todoRequest,

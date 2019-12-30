@@ -63,14 +63,8 @@ export function insertTodo(todoText) {
 
 export function fetchTodos() {
   return new Promise((resolve, reject) => {
-    userRef().orderByChild('email').equalTo('brijesh2@gmail.com').once('value', snap => {
-      alert(JSON.stringify(snap.val()))
+    userRef('todo').once('value', snap => {
+      resolve(Object.values(snap.val()))
     }).catch(e => alert(e));
-    // userRef('todo').once('value', (snapshot) => {
-    //   alert(JSON.stringify(snapshot.val()))
-    //   if (snapshot) {
-    //     resolve(Object.values(snapshot.val()))
-    //   }
-    // }).catch(e => reject(e));
   })
 }
