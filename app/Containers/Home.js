@@ -1,127 +1,98 @@
 import {
   Body,
-  Button,
   Container,
   Icon,
   Input,
   Item,
   ListItem,
-  Right,
   Text,
 } from 'native-base';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, View } from 'react-native';
-import { connect } from 'react-redux';
-import { Loader, CustomHeader } from '../Components';
-import authCreators from '../Redux/AuthRedux';
-import searchCreators from '../Redux/HomeRedux';
+import { useDispatch, useSelector } from 'react-redux';
 import { animatedGIF } from '../Animations';
+import { CustomHeader, Loader } from '../Components';
+import searchCreators from '../Redux/HomeRedux';
 import styles from './Styles/HomeStyles';
-import { NavigationEvents } from 'react-navigation';
 
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchText: '',
-      loading: false,
-    };
-  }
+const Searchbar = () => {
+  const [searchText, setSearchText] = useState('');
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    this.props.attemptSearch();
-  }
+  useEffect(() => {
+    dispatch(searchCreators.searchRequest());
+  }, [dispatch]);
 
-  onSearchChange = text => {
-    this.setState({ searchText: text });
-    if (text.trim().length > 0) {
-      this.props.attemptSearch(text.toLowerCase());
-    } else {
-      this.props.resetSearch();
-    }
-  };
+  const onSearchChange = useCallback(
+    text => {
+      setSearchText(text);
+      if (text.trim().length > 0) {
+        dispatch(searchCreators.searchRequest(text.toLowerCase()));
+      } else {
+        dispatch(searchCreators.reset());
+      }
+    },
+    [dispatch],
+  );
 
-  renderHeader() {
-    return <CustomHeader left title={'Home'} />;
-  }
+  return (
+    <Item>
+      <Icon name="ios-search" />
+      <Input
+        placeholder="Search"
+        onChangeText={onSearchChange}
+        value={searchText}
+      />
+    </Item>
+  );
+};
 
-  renderSearchbar() {
+const EmptyList = () => {
+  const { fetching } = useSelector(state => state.home);
+  if (!fetching) {
     return (
-      <Item>
-        <Icon name="ios-search" />
-        <Input
-          placeholder="Search"
-          onChangeText={this.onSearchChange}
-          value={this.state.searchText}
-        />
-      </Item>
+      <View style={styles.emptyList}>
+        <Loader source={animatedGIF.emptyList} />
+      </View>
     );
   }
+  return null;
+};
 
-  renderEmptyList() {
-    if (!this.props.fetching) {
-      return (
-        <View style={styles.emptyList}>
-          <Loader source={animatedGIF.emptyList} />
-        </View>
-      );
-    }
-    return null;
+const renderItem = ({ item }) => {
+  return (
+    <ListItem>
+      <Body>
+        <Text style={styles.title}>{item.title}</Text>
+        <Text>{item.company}</Text>
+      </Body>
+    </ListItem>
+  );
+};
+
+const SearchList = () => {
+  const { jobs } = useSelector(state => state.home);
+  if (jobs.length > 0) {
+    return <FlatList data={jobs} renderItem={renderItem} />;
+  } else {
+    return <EmptyList />;
   }
+};
 
-  renderItem = ({ item }) => {
-    return (
-      <ListItem>
-        <Body>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text>{item.company}</Text>
-        </Body>
-      </ListItem>
-    );
-  };
+const Home = () => {
+  const { fetching } = useSelector(state => state.home);
+  return (
+    <>
+      <CustomHeader left title={'Home'} />
+      <Container style={styles.container}>
+        <Searchbar />
+        {fetching && (
+          <Loader style={styles.loader} source={animatedGIF.loading} />
+        )}
+        <SearchList />
+      </Container>
+    </>
+  );
+};
 
-  renderList() {
-    const { jobs, fetching } = this.props;
-    console.tron.log(fetching);
-    return <FlatList data={jobs} renderItem={this.renderItem} />;
-  }
-
-  renderActivity() {
-    if (this.props.fetching) {
-      return <Loader style={styles.loader} source={animatedGIF.loading} />;
-    }
-    return null;
-  }
-
-  render() {
-    return (
-      <>
-        <NavigationEvents onDidFocus={() => this.props.attemptSearch()} />
-        {this.renderHeader()}
-        <Container style={styles.container}>
-          {this.renderSearchbar()}
-          {this.renderActivity()}
-          {this.props?.jobs.length > 0
-            ? this.renderList()
-            : this.renderEmptyList()}
-        </Container>
-      </>
-    );
-  }
-}
-
-const mapDispatchToProps = dispatch => ({
-  attemptSearch: filter => dispatch(searchCreators.searchRequest(filter)),
-  resetSearch: () => dispatch(searchCreators.reset()),
-  logout: () => dispatch(authCreators.reset()),
-});
-
-const mapStateToProps = state => ({
-  jobs: state.home.jobs,
-  fetching: state.home.fetching,
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Home);
+export default Home;

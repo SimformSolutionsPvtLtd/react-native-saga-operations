@@ -25,7 +25,7 @@ const authStack = createStackNavigator(
     Register: { screen: Register },
     Home: { screen: Home },
   },
-  { headerMode: 'none', initialRouteName: 'AllEffect' },
+  { headerMode: 'none', initialRouteName: 'Home' },
 );
 
 const PrimaryNav = createAnimatedSwitchNavigator(
