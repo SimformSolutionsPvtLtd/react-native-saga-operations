@@ -1,31 +1,28 @@
 import { StyleSheet } from 'react-native';
-import { ApplicationStyles, Fonts } from '../../Theme';
+import { ApplicationStyles, Colors } from '../../Theme';
+
 const styles = StyleSheet.create({
   ...ApplicationStyles.screen,
   container: {
-    padding: 20,
     flex: 1,
   },
+  innerContainer: {
+    padding: 10,
+  },
   button: {
-    width: 100,
     marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
   },
-  signup: {
-    alignSelf: 'center',
-    padding: 10,
-    fontSize: Fonts.size.medium,
-    fontWeight: 'bold',
+  right: {
+    color: Colors.black,
   },
-  header: {
-    height: '40%',
-    justifyContent: 'flex-end',
+  title: {
+    textAlign: 'center',
+    fontSize: 14,
+    color: Colors.grey,
     paddingBottom: 20,
-  },
-  headerTitle: {
-    ...Fonts.style.h2,
   },
 });
 

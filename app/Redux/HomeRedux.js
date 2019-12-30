@@ -1,4 +1,5 @@
 import { createActions, createReducer } from 'reduxsauce';
+import { resettableReducer } from 'reduxsauce';
 
 const initialState = {
   jobs: [],
@@ -10,11 +11,12 @@ export const { Types, Creators } = createActions({
   searchRequest: ['payload'],
   searchSuccess: ['payload'],
   searchFailure: ['payload'],
-  searchReset: [null],
+  reset: [null],
 });
 
 export default Creators;
 export const HomeTypes = Types;
+const resettable = resettableReducer(HomeTypes.RESET);
 
 const searchRequest = state => {
   return { ...state, fetching: true, error: null };
@@ -28,15 +30,10 @@ const searchFailure = (state, action) => {
   return { ...state, fetching: false, error: action.payload };
 };
 
-const searchReset = (state, action) => {
-  return initialState;
-};
-
 const handlers = {
   [Types.SEARCH_REQUEST]: searchRequest,
   [Types.SEARCH_SUCCESS]: searchSuccess,
   [Types.SEARCH_FAILURE]: searchFailure,
-  [Types.SEARCH_RESET]: searchReset,
 };
 
-export const homeReducer = createReducer(initialState, handlers);
+export const homeReducer = resettable(createReducer(initialState, handlers));

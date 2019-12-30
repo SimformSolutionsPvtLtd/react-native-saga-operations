@@ -9,9 +9,6 @@ class RootContainer extends React.Component {
     SplashScreen.hide();
     setTimeout(() => {
       let action = NavigationActions.navigate({ routeName: 'authStack' });
-      if (this.props.token) {
-        action = NavigationActions.navigate({ routeName: 'tab' });
-      }
       this.props.dispatch(action);
     }, 100);
   }

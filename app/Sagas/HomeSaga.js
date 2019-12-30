@@ -27,7 +27,7 @@ function* searchProceed(action, api) {
  */
 export function* search1(api, action) {
   const searching = yield fork(searchProceed, action, api);
-  yield take(HomeTypes.SEARCH_RESET);
+  yield take(HomeTypes.RESET);
   yield cancel(searching);
 }
 
@@ -40,7 +40,7 @@ export function* search1(api, action) {
 export function* search2(api, action) {
   const { response } = yield race({
     response: call(api().searchJob, action.payload),
-    reset: take(HomeTypes.SEARCH_RESET),
+    reset: take(HomeTypes.RESET),
   });
   if (response) {
     if (response.status === 200) {
@@ -58,9 +58,9 @@ export function* search2(api, action) {
 export function* search(api, action) {
   const { timeOut } = yield race({
     response: call(searchProceed, action, api),
-    cancel: take(HomeTypes.SEARCH_RESET),
+    cancel: take(HomeTypes.RESET),
   });
   if (timeOut) {
-    yield put(HomeActions.searchReset());
+    yield put(HomeActions.reset());
   }
 }

@@ -2,25 +2,22 @@ import {
   Body,
   Button,
   Container,
-  Header,
   Icon,
   Input,
   Item,
-  Left,
   ListItem,
   Right,
   Text,
-  Title,
 } from 'native-base';
 import React from 'react';
 import { FlatList, View } from 'react-native';
 import { connect } from 'react-redux';
-import { Loader } from '../Components';
+import { Loader, CustomHeader } from '../Components';
 import authCreators from '../Redux/AuthRedux';
 import searchCreators from '../Redux/HomeRedux';
 import { animatedGIF } from '../Animations';
 import styles from './Styles/HomeStyles';
-import { withNavigation, NavigationEvents } from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
 
 class Home extends React.Component {
   constructor(props) {
@@ -44,26 +41,8 @@ class Home extends React.Component {
     }
   };
 
-  onLogoutPress = () => {
-    const { logout, navigation } = this.props;
-    logout();
-    navigation.navigate('authStack');
-  };
-
   renderHeader() {
-    return (
-      <Header>
-        <Left />
-        <Body>
-          <Title>Home</Title>
-        </Body>
-        <Right>
-          <Button transparent onPress={this.onLogoutPress}>
-            <Icon type="FontAwesome" name="sign-out" style={styles.right} />
-          </Button>
-        </Right>
-      </Header>
-    );
+    return <CustomHeader left title={'Home'} />;
   }
 
   renderSearchbar() {
@@ -133,7 +112,7 @@ class Home extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   attemptSearch: filter => dispatch(searchCreators.searchRequest(filter)),
-  resetSearch: () => dispatch(searchCreators.searchReset()),
+  resetSearch: () => dispatch(searchCreators.reset()),
   logout: () => dispatch(authCreators.reset()),
 });
 

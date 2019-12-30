@@ -21,25 +21,27 @@ function* handleResponse(response) {
  */
 export function* login(api, action) {
   // yield take(AuthTypes.REGISTER_SUCCESS);
-  console.tron.log('request login');
+  console.log('request login');
   let response = yield call(api().login, {
     email: action.payload.email,
     password: action.payload.password,
   });
-  console.tron.log('getting response login:', response.data.token);
+  console.log('getting response login:', response.data.token);
   yield* handleResponse(response);
 }
 
 /**
  *
+ * @param {*} api api function for calling api
+ * @param {*} action contains email and password
  */
 export function* register(api, action) {
-  console.tron.log('request register1');
+  console.log('request register');
   let response = yield call(api().register, {
     email: action.payload.email,
     password: action.payload.password,
   });
-  console.tron.log('getting response register:', response.error);
+  console.log('getting response register:', response.data);
   if (response.status === 200) {
     yield put(AuthActions.registerSuccess(response.data.token));
   } else {
@@ -47,14 +49,26 @@ export function* register(api, action) {
   }
 }
 
-export function* login1(api, action) {
-  console.tron.log('request login1');
-  let response = yield call(api().login, {
-    email: action.payload.email,
-    password: action.payload.password,
-  });
-  console.tron.log('getting response login1:', response.data.token);
-  yield* handleResponse(response);
+/**
+ * simple log of argument for understanding
+ * @param {*} email
+ */
+function anotherFunction(email) {
+  console.log('anotherFunction with paramter email:', email);
+}
+
+/**
+ * function that calling anotherfunction using call effect
+ * @param {*} action it contain email and password
+ */
+export function* callSimpleFunction(action) {
+  console.log('call simple function before');
+  yield call(anotherFunction, action.payload.email);
+}
+
+export function* putSample(action) {
+  console.log('call putSample request');
+  yield put(AuthActions.putEffectSuccess('from auth saga to auth redux'));
 }
 
 /**
@@ -66,6 +80,6 @@ export function* watchRequests(api) {
   const requestChannel = yield actionChannel(AuthTypes.AUTH_REQUEST);
   while (true) {
     const action = yield take(requestChannel);
-    yield call(login1, api, action);
+    yield call(login, api, action);
   }
 }

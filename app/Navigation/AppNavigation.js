@@ -3,13 +3,13 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import Login from '../Containers/Login';
 import Home from '../Containers/Home';
+import Register from '../Containers/Register';
 import Profile from '../Containers/Profile';
 import Splash from '../Containers/Splash';
+import AllEffect from '../Containers/AllEffects';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+
 import { Transition } from 'react-native-reanimated';
-import { Icon } from 'native-base';
-import { Colors } from '../Theme';
 
 const onBoardStack = createStackNavigator(
   {
@@ -20,42 +20,18 @@ const onBoardStack = createStackNavigator(
 
 const authStack = createStackNavigator(
   {
+    AllEffect: { screen: AllEffect },
     Login: { screen: Login },
+    Register: { screen: Register },
+    Home: { screen: Home },
   },
-  { headerMode: 'none' },
-);
-
-const tabIcon = (label, icon) => {
-  return {
-    tabBarLabel: label,
-    tabBarIcon: ({ tintColor }) => (
-      <Icon name={icon} type="FontAwesome" size={30} />
-    ),
-  };
-};
-
-const tab = createBottomTabNavigator(
-  {
-    Home: { screen: Home, navigationOptions: tabIcon('Home', 'home') },
-    Profile: {
-      screen: Profile,
-      navigationOptions: tabIcon('Profile', 'user'),
-    },
-  },
-  {
-    headerMode: 'none',
-    tabBarOptions: {
-      activeTintColor: Colors.black,
-      inactiveTintColor: Colors.grey,
-    },
-  },
+  { headerMode: 'none', initialRouteName: 'AllEffect' },
 );
 
 const PrimaryNav = createAnimatedSwitchNavigator(
   {
     onBoardStack,
     authStack,
-    tab,
   },
   {
     initialRouteName: 'onBoardStack',

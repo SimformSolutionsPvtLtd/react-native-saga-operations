@@ -1,9 +1,17 @@
 import React from 'react';
-import { Content, Button, Text, Item, Input, Toast } from 'native-base';
-import { View } from 'react-native';
+import {
+  Content,
+  Button,
+  Text,
+  Item,
+  Input,
+  Toast,
+  Container,
+} from 'native-base';
 import styles from './Styles/LoginStyles';
 import { connect } from 'react-redux';
 import Creators from '../Redux/AuthRedux';
+import { CustomHeader } from '../Components';
 
 class Login extends React.Component {
   constructor(props) {
@@ -18,7 +26,7 @@ class Login extends React.Component {
     if (this.props.token) {
       this.props.navigation.navigate('tab');
     } else if (this.props.error) {
-      Toast.show({ text: 'Wrong emai or password', buttonText: 'Okay' });
+      Toast.show({ text: 'Wrong email or password', buttonText: 'Okay' });
     }
   }
 
@@ -30,26 +38,27 @@ class Login extends React.Component {
     this.setState({ password: password });
   };
 
-  onLoginPress = (isRegister = false) => {
+  onLoginPress = (takeLatest = false) => {
     const { email, password } = this.state;
-    const { login } = this.props;
-    isRegister ? login(email, password) : login(email, password);
+    const { login, loginWithTakeEvery } = this.props;
+    takeLatest ? login(email, password) : loginWithTakeEvery(email, password);
   };
 
-  onSignupPress = () => {
-    alert('In Progress');
-  };
   renderHeader() {
-    return (
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Login</Text>
-      </View>
-    );
+    return <CustomHeader left title={'Take Latest & Take effect'} />;
   }
 
-  renderForm() {
+  renderDescTitle = () => {
     return (
-      <Content>
+      <Text style={styles.title}>
+        Tap on Login multiple time, and see output into console log
+      </Text>
+    );
+  };
+
+  renderTextfields() {
+    return (
+      <>
         <Item>
           <Input
             placeholder="Username"
@@ -65,25 +74,33 @@ class Login extends React.Component {
             onChangeText={this.handlePasswordChange}
           />
         </Item>
+      </>
+    );
+  }
 
-        <Button style={styles.button} onPress={this.onLoginPress}>
-          <Text>Login</Text>
+  renderButton() {
+    return (
+      <>
+        <Button style={styles.button} onPress={() => this.onLoginPress(true)}>
+          <Text>Login using TakeLatest effect</Text>
         </Button>
-        <Text style={styles.signup} onPress={this.onSignupPress}>
-          Don't have an account?
-        </Text>
-      </Content>
+        <Button style={styles.button} onPress={() => this.onLoginPress()}>
+          <Text>Login using TakeEvery effect</Text>
+        </Button>
+      </>
     );
   }
 
   render() {
     return (
-      <>
-        <Content style={styles.container}>
-          {this.renderHeader()}
-          {this.renderForm()}
+      <Container style={styles.container}>
+        {this.renderHeader()}
+        <Content style={styles.innerContainer}>
+          {/* {this.renderDescTitle()} */}
+          {this.renderTextfields()}
+          {this.renderButton()}
         </Content>
-      </>
+      </Container>
     );
   }
 }
@@ -91,6 +108,8 @@ class Login extends React.Component {
 const mapDispatchToProps = dispatch => ({
   login: (email, password) =>
     dispatch(Creators.authRequest({ email, password })),
+  loginWithTakeEvery: (email, password) =>
+    dispatch(Creators.authRequestTakeEvery({ email, password })),
 });
 
 const mapStateToProps = state => ({

@@ -1,5 +1,5 @@
-import { all, takeLatest, call, takeEvery } from 'redux-saga/effects';
-import { login, register, watchRequests } from './AuthSaga';
+import { all, takeLatest, takeEvery } from 'redux-saga/effects';
+import { login, register, callSimpleFunction, putSample } from './AuthSaga';
 import { search } from './HomeSaga';
 import { createUser, updateUser } from './TestSaga';
 import { AuthTypes } from '../Redux/AuthRedux';
@@ -14,7 +14,10 @@ export default function* rootSaga() {
   yield all([
     // takeEvery('*', watchLog),
     takeLatest(AuthTypes.AUTH_REQUEST, login, ApiLogin),
-    // takeLatest(AuthTypes.AUTH_REQUEST, register, ApiLogin),
+    takeEvery(AuthTypes.AUTH_REQUEST_TAKE_EVERY, login, ApiLogin),
+    takeLatest(AuthTypes.REGISTER_REQUEST, register, ApiLogin),
+    takeLatest(AuthTypes.CALL_SIMPLE_FUNCTION, callSimpleFunction),
+    takeLatest(AuthTypes.PUT_EFFECT_REQUEST, putSample),
     takeLatest(HomeTypes.SEARCH_REQUEST, search, ApiJob),
     takeLatest(TestTypes.ADD_QUESTION, addQuestions),
     takeLatest(TestTypes.ADD_QUESTION, addQuestions1),
