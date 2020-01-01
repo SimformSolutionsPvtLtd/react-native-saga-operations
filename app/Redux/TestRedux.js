@@ -5,15 +5,19 @@ const initialState = {
   user: null,
   fetching: false,
   error: null,
+  internetState: false,
 };
 
 export const { Types, Creators } = createActions({
+  counterStart: [null],
+  addInternetConnectivityListener: [null],
+  internetConnectivityChange: ['payload'],
   addQuestion: ['question'],
   addQuestion1: ['question'],
-  startApp: [],
   createUser: ['payload'],
   createUserSuccess: ['payload', 'userData'],
   createUserFailure: ['payload'],
+  testAllEffect: [null],
 });
 
 export default Creators;
@@ -25,10 +29,6 @@ const add_question = (state, action) => {
 
 const add_question1 = (state, action) => {
   return { question: [...state.question, action.question] };
-};
-
-const startApp = state => {
-  return { ...state };
 };
 
 const createUserRequest = state => {
@@ -43,13 +43,17 @@ const createUserFailure = (state, action) => {
   return { ...state, fetching: false, error: action.payload };
 };
 
+const changeInternetStatus = (state, action) => {
+  return { ...state, internetState: action.payload };
+};
+
 const handlers = {
   [Types.ADD_QUESTION]: add_question,
   [Types.ADD_QUESTION1]: add_question1,
-  [Types.START_APP]: startApp,
   [Types.CREATE_USER]: createUserRequest,
   [Types.CREATE_USER_SUCCESS]: createUserSuccess,
   [Types.CREATE_USER_FAILURE]: createUserFailure,
+  [Types.INTERNET_CONNECTIVITY_CHANGE]: changeInternetStatus,
 };
 
 export const testReducer = createReducer(initialState, handlers);

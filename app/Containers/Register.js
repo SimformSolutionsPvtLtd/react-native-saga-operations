@@ -23,6 +23,10 @@ const Register = () => {
     dispatch(authCreators.putEffectRequest('put effect'));
   }, [dispatch]);
 
+  const onSelectPress = useCallback(() => {
+    dispatch(authCreators.getState());
+  }, [dispatch]);
+
   return (
     <View style={styles.container}>
       <CustomHeader left title={'Call & Put'} />
@@ -34,6 +38,9 @@ const Register = () => {
       </Button>
       <Button style={styles.call} onPress={onCallPress}>
         <Text>Put</Text>
+      </Button>
+      <Button style={styles.call} onPress={onSelectPress}>
+        <Text>Select</Text>
       </Button>
     </View>
   );

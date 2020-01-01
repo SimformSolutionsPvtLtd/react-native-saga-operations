@@ -1,5 +1,7 @@
-import { take, select, call, fork, put } from 'redux-saga/effects';
+import { take, select, call, put, all } from 'redux-saga/effects';
 import Actions, { TestTypes } from '../Redux/TestRedux';
+import { eventChannel, END } from 'redux-saga';
+import NetInfo from '@react-native-community/netinfo';
 
 export function* watchLog(action) {
   console.log('dispatched action', action);
@@ -20,6 +22,7 @@ export function* addQuestions1(action) {
 }
 
 export function* updateUser(api, action) {
+  console.log('Start update user');
   const response = yield call(
     api().updateUser,
     action.payload,
@@ -33,6 +36,7 @@ export function* updateUser(api, action) {
 }
 
 export function* createUser(api, action) {
+  console.log('Start create user');
   const response = yield call(api().createUser, {
     name: action.name,
     job: action.job,
@@ -44,30 +48,76 @@ export function* createUser(api, action) {
   }
 }
 
-export function* connect() {
-  console.log('connect');
-  return { socket: 'socket' };
+function f1() {
+  console.log('call function 1');
+}
+function f2() {
+  console.log('call function 2');
 }
 
-export function* subscribe(socket) {
-  console.log('subscribe', socket);
-  return unsubscribe;
+/**
+ * calling f1 and f2 function simultenuously using all effect
+ */
+export function* testAllEffect() {
+  yield all([call(f1), call(f2)]);
 }
 
-export function* unsubscribe(socket) {
-  console.log('unsubscribe', socket);
+function countdown(secs) {
+  return eventChannel(emitter => {
+    const iv = setInterval(() => {
+      secs -= 1;
+      if (secs > 0) {
+        emitter(secs);
+      } else {
+        // this causes the channel to close
+        emitter(END);
+      }
+    }, 1000);
+    // The subscriber must return an unsubscribe function
+    return () => {
+      clearInterval(iv);
+    };
+  });
 }
 
-export function* read(socket) {
-  console.log('read');
-  const channel = yield call(subscribe, socket);
-  while (true) {
-    let action = yield take(channel);
-    yield put(action);
+export function* counter() {
+  // creates an event Channel from an interval of seconds
+  const chan = yield call(countdown, 25);
+  try {
+    while (true) {
+      // take(END) will cause the saga to terminate by jumping to the finally block
+      let seconds = yield take(chan);
+      console.log(`countdown: ${seconds}`);
+    }
+  } finally {
+    console.log('countdown terminated');
   }
 }
-export function* flow() {
-  yield take(TestTypes.START_APP);
-  const socket = yield call(connect);
-  yield fork(read, socket);
+
+/**
+ * Create one event channel and add extenal listener into event channel and subscribig it.
+ * here external event listener is internet connectivity listener, once internet connectivity changes it automatically call listener and
+ * return connection state
+ * @returns internet connectivity state
+ */
+function startInternetListen() {
+  return eventChannel(listener => {
+    const removeListener = NetInfo.addEventListener(state => {
+      listener(state.isConnected);
+    });
+    return removeListener;
+  });
+}
+
+/**
+ * Call startInternetListen function and buffer it, once internet connectivity change,
+ * it dispatching internetConnectivityChange action
+ */
+export function* internetConnectivity() {
+  const channel = yield call(startInternetListen);
+  while (true) {
+    const connectionInfo = yield take(channel);
+    console.log('connectionInfo', connectionInfo);
+    yield put(Actions.internetConnectivityChange(connectionInfo));
+  }
 }

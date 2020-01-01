@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, Text } from 'react-native';
 import styles from './Styles/AllEffectStyles';
-import { Container, Content, ListItem, Right, Button, Icon } from 'native-base';
+import { Container, ListItem, Right, Button, Icon } from 'native-base';
 import { useNavigation } from 'react-navigation-hooks';
 import { CustomHeader } from '../Components';
 import { useDispatch } from 'react-redux';
@@ -56,17 +56,16 @@ const renderList = list => {
 
 const AllEffect = () => {
   const list = [
-    { id: 1, title: 'TakeLatest & TakeEvery', routeName: 'Login' },
-    { id: 2, title: 'Call & Put', routeName: 'Register' },
-    { id: 3, title: 'All' },
-    { id: 4, title: 'Select' },
-    { id: 5, title: 'Race & Fork & Cancel', routeName: 'Home' },
+    { id: 1, title: 'TakeLatest & TakeEvery & All', routeName: 'Login' },
+    { id: 2, title: 'Call & Put & Select', routeName: 'Register' },
+    { id: 3, title: 'Race & Fork & Cancel', routeName: 'Home' },
+    { id: 4, title: 'Action channel & Event channel', routeName: 'Channels' },
   ];
 
   return (
     <Container style={styles.container}>
       <Header />
-      <Content>{renderList(list)}</Content>
+      {renderList(list)}
     </Container>
   );
 };

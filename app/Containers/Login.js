@@ -11,11 +11,13 @@ import {
 import styles from './Styles/LoginStyles';
 import { connect } from 'react-redux';
 import Creators from '../Redux/AuthRedux';
+import testCreators from '../Redux/TestRedux';
 import { CustomHeader } from '../Components';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
+    this.count = 1;
     this.state = {
       email: 'eve.holt@reqres.in',
       password: 'cityslicka',
@@ -41,7 +43,14 @@ class Login extends React.Component {
   onLoginPress = (takeLatest = false) => {
     const { email, password } = this.state;
     const { login, loginWithTakeEvery } = this.props;
-    takeLatest ? login(email, password) : loginWithTakeEvery(email, password);
+    takeLatest
+      ? login(email, password, this.count++)
+      : loginWithTakeEvery(email, password, this.count++);
+  };
+
+  onAllPress = () => {
+    const { attemptAllEffect } = this.props;
+    attemptAllEffect();
   };
 
   renderHeader() {
@@ -51,7 +60,7 @@ class Login extends React.Component {
   renderDescTitle = () => {
     return (
       <Text style={styles.title}>
-        Tap on Login multiple time, and see output into console log
+        Tap on Buttons multiple time, and see output into console log
       </Text>
     );
   };
@@ -87,6 +96,9 @@ class Login extends React.Component {
         <Button style={styles.button} onPress={() => this.onLoginPress()}>
           <Text>Login using TakeEvery effect</Text>
         </Button>
+        <Button style={styles.button} onPress={this.onAllPress}>
+          <Text>All</Text>
+        </Button>
       </>
     );
   }
@@ -96,7 +108,7 @@ class Login extends React.Component {
       <Container style={styles.container}>
         {this.renderHeader()}
         <Content style={styles.innerContainer}>
-          {/* {this.renderDescTitle()} */}
+          {this.renderDescTitle()}
           {this.renderTextfields()}
           {this.renderButton()}
         </Content>
@@ -106,10 +118,11 @@ class Login extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  login: (email, password) =>
-    dispatch(Creators.authRequest({ email, password })),
-  loginWithTakeEvery: (email, password) =>
-    dispatch(Creators.authRequestTakeEvery({ email, password })),
+  login: (email, password, count) =>
+    dispatch(Creators.authRequest({ email, password, count })),
+  loginWithTakeEvery: (email, password, count) =>
+    dispatch(Creators.authRequestTakeEvery({ email, password, count })),
+  attemptAllEffect: () => dispatch(testCreators.testAllEffect()),
 });
 
 const mapStateToProps = state => ({

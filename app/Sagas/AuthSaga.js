@@ -3,7 +3,8 @@ import {
   put,
   take,
   actionChannel,
-  eventChannel,
+  delay,
+  select,
 } from 'redux-saga/effects';
 import AuthActions, { AuthTypes } from '../Redux/AuthRedux';
 function* handleResponse(response) {
@@ -21,12 +22,16 @@ function* handleResponse(response) {
  */
 export function* login(api, action) {
   // yield take(AuthTypes.REGISTER_SUCCESS);
-  console.log('request login');
+  console.log('request login', action.payload.count);
   let response = yield call(api().login, {
     email: action.payload.email,
     password: action.payload.password,
   });
-  console.log('getting response login:', response.data.token);
+  console.log(
+    'getting response login:',
+    response.data.token,
+    action.payload.count,
+  );
   yield* handleResponse(response);
 }
 
@@ -72,14 +77,46 @@ export function* putSample(action) {
 }
 
 /**
+ * Here we have a login functionality in which first register a user then automatically login and navigate to home screen
+ *
+ * It is wait for REGISTER_SUCCESS action dispatching then perform api call
+ */
+export function* loginForChannel(api, action) {
+  // yield take(AuthTypes.REGISTER_SUCCESS);
+  console.log('request login using channel,', action.payload.count);
+  let response = yield call(api().login, {
+    email: action.payload.email,
+    password: action.payload.password,
+  });
+  yield delay(3000);
+  console.log(
+    'getting response login:',
+    response.data.token,
+    action.payload.count,
+  );
+  yield* handleResponse(response);
+}
+
+/**
  * Here in this function we're created one channel(listen channel) with AUTH_REQUEST pattern and register it.
  * once AUTH_REQUEST action dispatched it automatically execute block of after take effect(call of login api).
  * @param {*} api api url from watcher function
  */
 export function* watchRequests(api) {
-  const requestChannel = yield actionChannel(AuthTypes.AUTH_REQUEST);
+  const requestChannel = yield actionChannel(
+    AuthTypes.AUTH_REQUEST_ACTION_CHANNEL,
+  );
   while (true) {
     const action = yield take(requestChannel);
-    yield call(login, api, action);
+    yield call(loginForChannel, api, action);
   }
+}
+
+/**
+ * Getting all state of auth reducer and display into alert
+ */
+export function* getState() {
+  const allAuthState = state => state.auth;
+  const authState = yield select(allAuthState);
+  alert(JSON.stringify(authState));
 }

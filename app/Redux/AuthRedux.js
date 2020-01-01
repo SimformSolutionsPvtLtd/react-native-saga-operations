@@ -18,6 +18,8 @@ export const { Types, Creators } = createActions({
   putEffectRequest: ['payload'],
   putEffectSuccess: ['payload'],
   reset: [null],
+  authRequestActionChannel: ['payload'],
+  getState: [null],
 });
 
 export default Creators;

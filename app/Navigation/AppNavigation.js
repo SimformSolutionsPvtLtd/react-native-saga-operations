@@ -5,6 +5,7 @@ import Login from '../Containers/Login';
 import Home from '../Containers/Home';
 import Register from '../Containers/Register';
 import Profile from '../Containers/Profile';
+import Channels from '../Containers/Channels';
 import Splash from '../Containers/Splash';
 import AllEffect from '../Containers/AllEffects';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
@@ -24,8 +25,9 @@ const authStack = createStackNavigator(
     Login: { screen: Login },
     Register: { screen: Register },
     Home: { screen: Home },
+    Channels: { screen: Channels },
   },
-  { headerMode: 'none', initialRouteName: 'Home' },
+  { headerMode: 'none', initialRouteName: 'AllEffect' },
 );
 
 const PrimaryNav = createAnimatedSwitchNavigator(
