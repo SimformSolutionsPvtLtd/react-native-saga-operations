@@ -19,9 +19,11 @@ const create = (baseURL = Config.API_URL) => {
   });
   const login = loginData => api.post('/login', loginData);
   const register = registerData => api.post('/register', registerData);
+  const fetchResource = () => api.get('/unknown');
   return {
     login,
     register,
+    fetchResource,
   };
 };
 

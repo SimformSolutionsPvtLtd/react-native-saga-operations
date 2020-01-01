@@ -11,15 +11,18 @@ export const { Types, Creators } = createActions({
   authRequest: ['payload'],
   authSuccess: ['payload'],
   authFailure: ['payload'],
+  resourceSuccess: ['payload'],
   registerRequest: ['payload'],
   registerSuccess: ['payload'],
   authRequestTakeEvery: ['payload'],
+  authRequestWithResource: ['payload'],
   callSimpleFunction: ['payload'],
   putEffectRequest: ['payload'],
   putEffectSuccess: ['payload'],
   reset: [null],
   authRequestActionChannel: ['payload'],
   getState: [null],
+  throttleTest: ['payload'],
 });
 
 export default Creators;
@@ -32,6 +35,10 @@ const authRequest = state => {
 
 const authSuccess = (state, action) => {
   return { ...state, fetching: false, token: action.payload };
+};
+
+const resourceSuccess = (state, action) => {
+  return { ...state, fetching: false, resources: action.payload };
 };
 
 const authFailure = (state, action) => {
@@ -57,6 +64,8 @@ const handlers = {
   [Types.CALL_SIMPLE_FUNCTION]: authRequest,
   [Types.PUT_EFFECT_REQUEST]: authRequest,
   [Types.PUT_EFFECT_SUCCESS]: putEffectTest,
+  [Types.AUTH_REQUEST_WITH_RESOURCE]: authRequest,
+  [Types.RESOURCE_SUCCESS]: resourceSuccess,
 };
 
 export const authReducer = resettable(createReducer(initialState, handlers));

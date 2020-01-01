@@ -1,4 +1,4 @@
-import { take, select, call, put, all } from 'redux-saga/effects';
+import { take, select, call, put, all, delay } from 'redux-saga/effects';
 import Actions, { TestTypes } from '../Redux/TestRedux';
 import { eventChannel, END } from 'redux-saga';
 import NetInfo from '@react-native-community/netinfo';

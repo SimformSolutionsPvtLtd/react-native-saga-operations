@@ -1,136 +1,142 @@
-import React from 'react';
-import {
-  Content,
-  Button,
-  Text,
-  Item,
-  Input,
-  Toast,
-  Container,
-} from 'native-base';
-import styles from './Styles/LoginStyles';
-import { connect } from 'react-redux';
+import { Button, Container, Content, Item, Text } from 'native-base';
+import React, { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { CustomHeader, CustomInput } from '../Components';
 import Creators from '../Redux/AuthRedux';
 import testCreators from '../Redux/TestRedux';
-import { CustomHeader } from '../Components';
+import styles from './Styles/LoginStyles';
 
-class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.count = 1;
-    this.state = {
-      email: 'eve.holt@reqres.in',
-      password: 'cityslicka',
-    };
-  }
+const DescTitle = () => {
+  return (
+    <Text style={styles.title}>
+      Tap on Buttons multiple time, and see output into console log
+    </Text>
+  );
+};
 
-  componentDidUpdate(prevProps) {
-    if (this.props.token) {
-      this.props.navigation.navigate('tab');
-    } else if (this.props.error) {
-      Toast.show({ text: 'Wrong email or password', buttonText: 'Okay' });
-    }
-  }
+const useLoginForm = () => {
+  const [email, setEmail] = useState('eve.holt@reqres.in');
+  const [password, setPassword] = useState('cityslicka');
+  const dispatch = useDispatch();
 
-  handleEmailChange = email => {
-    this.setState({ email: email });
-  };
+  const handleEmailChange = useCallback(
+    text => {
+      setEmail(text);
+      dispatch(Creators.throttleTest(text));
+    },
+    [dispatch],
+  );
 
-  handlePasswordChange = password => {
-    this.setState({ password: password });
-  };
+  const handlePasswordChange = useCallback(
+    text => {
+      setPassword(text);
+    },
+    [setPassword],
+  );
+  return { email, password, handleEmailChange, handlePasswordChange };
+};
 
-  onLoginPress = (takeLatest = false) => {
-    const { email, password } = this.state;
-    const { login, loginWithTakeEvery } = this.props;
+const useButtons = (email, password) => {
+  const dispatch = useDispatch();
+  var count = 1;
+  const requestParam = { email, password, count: count++ };
+  const onLoginPress = (takeLatest = false) => {
     takeLatest
-      ? login(email, password, this.count++)
-      : loginWithTakeEvery(email, password, this.count++);
+      ? dispatch(Creators.authRequest(requestParam))
+      : dispatch(Creators.authRequestTakeEvery(requestParam));
   };
 
-  onAllPress = () => {
-    const { attemptAllEffect } = this.props;
-    attemptAllEffect();
+  const onAllPress = () => {
+    dispatch(testCreators.testAllEffect());
   };
 
-  renderHeader() {
-    return <CustomHeader left title={'Take Latest & Take effect'} />;
-  }
-
-  renderDescTitle = () => {
-    return (
-      <Text style={styles.title}>
-        Tap on Buttons multiple time, and see output into console log
-      </Text>
-    );
+  const onTakePress = () => {
+    dispatch(Creators.authRequestWithResource(requestParam));
   };
 
-  renderTextfields() {
-    return (
-      <>
-        <Item>
-          <Input
-            placeholder="Username"
-            value={this.state.email}
-            onChangeText={this.handleEmailChange}
-          />
-        </Item>
-        <Item>
-          <Input
-            secureTextEntry
-            placeholder="Password"
-            value={this.state.password}
-            onChangeText={this.handlePasswordChange}
-          />
-        </Item>
-      </>
-    );
-  }
+  const onDebouncePress = () => {
+    dispatch(Creators.throttleTest());
+  };
 
-  renderButton() {
-    return (
-      <>
-        <Button style={styles.button} onPress={() => this.onLoginPress(true)}>
-          <Text>Login using TakeLatest effect</Text>
-        </Button>
-        <Button style={styles.button} onPress={() => this.onLoginPress()}>
-          <Text>Login using TakeEvery effect</Text>
-        </Button>
-        <Button style={styles.button} onPress={this.onAllPress}>
-          <Text>All</Text>
-        </Button>
-      </>
-    );
-  }
+  return { onLoginPress, onAllPress, onTakePress, onDebouncePress };
+};
 
-  render() {
-    return (
-      <Container style={styles.container}>
-        {this.renderHeader()}
-        <Content style={styles.innerContainer}>
-          {this.renderDescTitle()}
-          {this.renderTextfields()}
-          {this.renderButton()}
-        </Content>
-      </Container>
-    );
-  }
-}
+const Buttons = ({ email, password }) => {
+  const { onLoginPress, onAllPress, onTakePress, onDebouncePress } = useButtons(
+    email,
+    password,
+  );
+  return (
+    <>
+      <Button style={styles.button} onPress={() => onLoginPress(true)}>
+        <Text>Login using TakeLatest effect</Text>
+      </Button>
+      <Button style={styles.button} onPress={onLoginPress}>
+        <Text>Login using TakeEvery effect</Text>
+      </Button>
+      <Button style={styles.button} onPress={onAllPress}>
+        <Text>All</Text>
+      </Button>
+      <Button style={styles.button} onPress={onTakePress}>
+        <Text>Take</Text>
+      </Button>
+      <Button style={styles.button} onPress={onDebouncePress}>
+        <Text>Debounce</Text>
+      </Button>
+    </>
+  );
+};
 
-const mapDispatchToProps = dispatch => ({
-  login: (email, password, count) =>
-    dispatch(Creators.authRequest({ email, password, count })),
-  loginWithTakeEvery: (email, password, count) =>
-    dispatch(Creators.authRequestTakeEvery({ email, password, count })),
-  attemptAllEffect: () => dispatch(testCreators.testAllEffect()),
-});
+const TextFields = () => {
+  const {
+    email,
+    password,
+    handleEmailChange,
+    handlePasswordChange,
+  } = useLoginForm();
+  return (
+    <>
+      <Item>
+        <CustomInput
+          placeholder="Username"
+          value={email}
+          onChange={handleEmailChange}
+        />
+      </Item>
+      <Item>
+        <CustomInput
+          secureTextEntry
+          placeholder="Password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+      </Item>
+      <Buttons email={email} password={password} />
+    </>
+  );
+};
 
-const mapStateToProps = state => ({
-  token: state.auth.token,
-  error: state.auth.error,
-});
+const Login = () => {
+  // const { fetching, error, token } = useSelector(state => state.auth);
+  // const prevFetching = usePrevious(fetching);
+  // const navigation = useNavigation();
+  // useEffect(() => {
+  //   if (token && !fetching) {
+  //     navigation.navigate('AllEffect');
+  //   } else if (prevFetching && !fetching) {
+  //     Toast.show({ text: 'Wrong email or password', buttonText: 'Okay' });
+  //   }
+  // }, [token, error, navigation, fetching, prevFetching]);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Login);
+  return (
+    <Container style={styles.container}>
+      <CustomHeader left title={'Take Latest & Take effect'} />
+      <Content style={styles.innerContainer}>
+        <DescTitle />
+        <TextFields />
+      </Content>
+    </Container>
+  );
+};
+
+export default Login;

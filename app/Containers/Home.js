@@ -14,6 +14,7 @@ import { animatedGIF } from '../Animations';
 import { CustomHeader, Loader } from '../Components';
 import searchCreators from '../Redux/HomeRedux';
 import styles from './Styles/HomeStyles';
+import { useNavigationParam } from 'react-navigation-hooks';
 
 const Searchbar = () => {
   const [searchText, setSearchText] = useState('');
@@ -22,17 +23,23 @@ const Searchbar = () => {
   useEffect(() => {
     dispatch(searchCreators.searchRequest());
   }, [dispatch]);
-
+  const type = useNavigationParam('type') || '';
   const onSearchChange = useCallback(
     text => {
       setSearchText(text);
       if (text.trim().length > 0) {
-        dispatch(searchCreators.searchRequest(text.toLowerCase()));
+        if (type === 'debounce') {
+          dispatch(searchCreators.debounceTest(text.toLowerCase()));
+        } else if (type === 'throttle') {
+          dispatch(searchCreators.throttleTest(text.toLowerCase()));
+        } else {
+          dispatch(searchCreators.searchRequest(text.toLowerCase()));
+        }
       } else {
         dispatch(searchCreators.reset());
       }
     },
-    [dispatch],
+    [dispatch, type],
   );
 
   return (

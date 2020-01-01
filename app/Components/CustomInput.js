@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Input } from 'native-base';
 
 const CustomInput = props => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(props.value);
 
   const onChange = useCallback(
     text => {

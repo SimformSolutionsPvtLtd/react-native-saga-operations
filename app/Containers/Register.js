@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { CustomHeader } from '../Components';
 import authCreators from '../Redux/AuthRedux';
+import testCreators from '../Redux/TestRedux';
 import styles from './Styles/RegisterStyles';
 
 const Register = () => {
@@ -27,6 +28,10 @@ const Register = () => {
     dispatch(authCreators.getState());
   }, [dispatch]);
 
+  const onTakePress = useCallback(() => {
+    dispatch(testCreators.testTakeEffecte());
+  }, [dispatch]);
+
   return (
     <View style={styles.container}>
       <CustomHeader left title={'Call & Put'} />
@@ -41,6 +46,9 @@ const Register = () => {
       </Button>
       <Button style={styles.call} onPress={onSelectPress}>
         <Text>Select</Text>
+      </Button>
+      <Button style={styles.call} onPress={onTakePress}>
+        <Text>Take</Text>
       </Button>
     </View>
   );

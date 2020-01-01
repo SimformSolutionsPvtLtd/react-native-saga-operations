@@ -11,6 +11,8 @@ export const { Types, Creators } = createActions({
   searchRequest: ['payload'],
   searchSuccess: ['payload'],
   searchFailure: ['payload'],
+  debounceTest: ['payload'],
+  throttleTest: ['payload'],
   reset: [null],
 });
 

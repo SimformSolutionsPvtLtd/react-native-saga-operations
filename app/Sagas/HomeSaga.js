@@ -56,6 +56,7 @@ export function* search2(api, action) {
  * @param {*} action
  */
 export function* search(api, action) {
+  console.log('search', action.payload);
   const { timeOut } = yield race({
     response: call(searchProceed, action, api),
     cancel: take(HomeTypes.RESET),
